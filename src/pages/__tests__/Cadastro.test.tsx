@@ -149,11 +149,13 @@ describe("Cadastro Page", () => {
 
   it("deve apresentar os erros de validação para o usuário, caso a API retorne erro", async () => {
     // setup
-    jest.spyOn(axios, "post").mockRejectedValue(new Error('Erro de validação'));
+    jest.spyOn(axios, "post").mockRejectedValue(new Error("Erro de validação"));
     const nome = screen.getByPlaceholderText("Nome");
     const email = screen.getByPlaceholderText("e-mail");
     const senha = screen.getByPlaceholderText("Senha");
-    const confirmacaoSenha = screen.getByPlaceholderText("Confirmação de Senha");
+    const confirmacaoSenha = screen.getByPlaceholderText(
+      "Confirmação de Senha"
+    );
     const codigoAcesso = screen.getByPlaceholderText("Código de Acesso");
     const botao = screen.getByText("Cadastrar");
     const dados = {
@@ -173,8 +175,10 @@ describe("Cadastro Page", () => {
 
     // asserts
     expect(axios.post).toHaveBeenCalledWith(
-      new Error('Erro de validação'),
+      expect.stringContaining("/auth/cadastrar"),
       dados
     );
+
+    expect(await screen.findByText("Erro de validação")).toBeInTheDocument();
   });
 });
